@@ -1,10 +1,10 @@
 * Spring 2023 - Lab 08
 
-* Last name:
+* Last name: Weerasinghe
 
-* First name:
+* First name: Saraya
 
-* GitHub username:
+* GitHub username: sarayaw
 
 * Notes:
 
