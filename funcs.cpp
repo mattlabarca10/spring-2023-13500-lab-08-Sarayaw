@@ -9,11 +9,12 @@
 const int MAX_H = 512;
 const int MAX_W = 512;
 
+// invert() inverts all colors, so white shades become black, and black become white
 void invert(std::string name, std::string out_name) {
     int height, width; 
     int image[MAX_H][MAX_W];
     readImage(name, image, height, width); 
-
+    
     int out[MAX_H][MAX_W];
 
     for (int row = 0; row < height; row++) {
@@ -30,6 +31,7 @@ void invert(std::string name, std::string out_name) {
     return;
 }
 
+// invert_half() inverts the right half of the image
 void invert_half(std::string name, std::string out_name) {
     int height, width; 
     int image[MAX_H][MAX_W];
@@ -57,6 +59,7 @@ void invert_half(std::string name, std::string out_name) {
     return;
 }
 
+// box() draws a white box in the middle of the image
 void box(std::string name, std::string out_name) {
     int height, width; 
     int image[MAX_H][MAX_W];
@@ -85,6 +88,7 @@ void box(std::string name, std::string out_name) {
     return;
 }
 
+// frame() draws a white frame around the image one pixel thick
 void frame(std::string name, std::string out_name) {
     int height, width; 
     int image[MAX_H][MAX_W];
@@ -113,56 +117,57 @@ void frame(std::string name, std::string out_name) {
     return; 
 }
 
+// scale() scales the image by 200%
 void scale(std::string name, std::string out_name) {
-int height, width;
-int image[MAX_H][MAX_W];
-readImage(name, image, height, width);
-  
- int out[MAX_H][MAX_W];
+    int height, width;
+    int image[MAX_H][MAX_W];
+    readImage(name, image, height, width);
+    int out[MAX_H][MAX_W];
 
-for (int row = 0; row < height * 2; row++) {
-    for (int col = 0; col < width * 2; col++) {
-        assert(image[row / 2][col / 2] < 256);
-        assert(image[row / 2][col / 2] >= 0);
-        out[row][col] = image[row / 2][col / 2];
+    for (int row = 0; row < height * 2; row++) {
+        for (int col = 0; col < width * 2; col++) {
+            assert(image[row / 2][col / 2] < 256);
+            assert(image[row / 2][col / 2] >= 0);
+            out[row][col] = image[row / 2][col / 2];
+        }
     }
+
+    writeImage(out_name, out, height * 2, width * 2);
+    return;
 }
 
-writeImage(out_name, out, height * 2, width * 2);
-return;
-  }
-
+// pixelate() pixelates the image by averaging the colors of a 2x2 square
 void pixelate(std::string name, std::string out_name) {
-int height, width;
-int image[MAX_H][MAX_W];
-readImage(name, image, height, width);
-  
-  int out[MAX_H][MAX_W];
+    int height, width;
+    int image[MAX_H][MAX_W];
+    readImage(name, image, height, width);
+    int out[MAX_H][MAX_W];
 
-for (int row = 0; row < height; row += 2) {
-    for (int col = 0; col < width; col += 2) {
-        assert(image[row][col] < 256);
-        assert(image[row][col] >= 0);
-        int sum = 0;
-        int pixels = 0;
-        for (int i = 0; i < 2; i++) {
-            for (int j = 0; j < 2; j++) {
-                if (row + i < height && col + j < width) {
-                    sum += image[row + i][col + j];
-                    pixels++;
+    for (int row = 0; row < height; row += 2) {
+        for (int col = 0; col < width; col += 2) {
+            assert(image[row][col] < 256);
+            assert(image[row][col] >= 0);
+            int sum = 0;
+            int pixels = 0;
+            for (int i = 0; i < 2; i++) {
+                for (int j = 0; j < 2; j++) {
+                    if (row + i < height && col + j < width) {
+                        sum += image[row + i][col + j];
+                        pixels++;
+                    }
                 }
             }
-        }
-        int average = sum / pixels;
-        for (int i = 0; i < 2; i++) {
-            for (int j = 0; j < 2; j++) {
-                if (row + i < height && col + j < width) {
-                    out[row + i][col + j] = average;
+            int average = sum / pixels;
+            for (int i = 0; i < 2; i++) {
+                for (int j = 0; j < 2; j++) {
+                    if (row + i < height && col + j < width) {
+                        out[row + i][col + j] = average;
+                    }
                 }
             }
         }
     }
-}
 
-writeImage(out_name, out, height, width);
-return;
+    writeImage(out_name, out, height, width);
+    return;
+}
